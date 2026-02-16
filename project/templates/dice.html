@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Dice Game</title>
+    <style>
+      body { font-family: Arial, sans-serif; text-align:center; padding:2rem }
+      .card { display:inline-block; text-align:left; padding:1rem 1.25rem; border:1px solid #ddd; border-radius:10px; min-width:320px; }
+      .row { margin: 0.35rem 0; }
+      .label { font-weight:bold; }
+      .result { margin-top:0.75rem; padding:0.75rem; border-radius:8px; background:#f7f7f7; }
+      .error { background:#ffe7e7; }
+      button { padding:0.5rem 1rem; font-size:1rem; cursor:pointer; }
+      input { padding:0.35rem; width:120px; }
+      .muted { color:#666; }
+    </style>
+  </head>
+  <body>
+    <h1>Dice Game</h1>
+
+    <div class="card">
+      <div class="row"><span class="label">Turn:</span> {{ turn }}</div>
+
+      <div class="row">
+        <span class="label">Point:</span>
+        {% if point is not none %}{{ point }}{% else %}-{% endif %}
+      </div>
+
+      <div class="row">
+        <span class="label">Last roll:</span>
+        {% if last_roll is not none %}{{ last_roll }}{% else %}-{% endif %}
+      </div>
+
+      <div class="row">
+        <span class="label">Finished:</span> {{ "Yes" if finished else "No" }}
+      </div>
+
+      <div class="result {% if result and result.startswith('Error:') %}error{% endif %}">
+        <span class="label">Result:</span>
+        {% if result %}{{ result }}{% else %}<span class="muted">No result yet.</span>{% endif %}
+      </div>
+
+      <form action="/roll" method="post" style="margin-top:1rem">
+        <label for="roll" class="label">Enter die roll (2–12):</label><br>
+        <input id="roll" name="roll" type="number" min="2" max="12" required {% if finished %}disabled{% endif %}>
+        <button type="submit" {% if finished %}disabled{% endif %}>Submit Roll</button>
+      </form>
+
+      <form action="/roll_random" method="get" style="margin-top:0.5rem">
+        <button type="submit" {% if finished %}disabled{% endif %}>Roll Random</button>
+      </form>
+
+      <form action="/reset" method="get" style="margin-top:0.5rem">
+        <button type="submit">Start New Game</button>
+      </form>
+
+      {% if finished %}
+        <p class="muted" style="margin-top:0.75rem;">Game finished — click <b>Start New Game</b> to play again.</p>
+      {% endif %}
+    </div>
+  </body>
+</html>
