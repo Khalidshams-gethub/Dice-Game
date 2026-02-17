@@ -1,3 +1,4 @@
+<!-- Top-level README moved from project/README.md -->
 # Dice Game — Web (Flask)
 
 A minimal Flask web UI for the Dice Game.
